@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.frame.kangan.data.mapper.FrameImageMapper">
+<mapper namespace="com.frame.kangan.data.mapper.FramePermissionMapper">
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 id, type, hashcode, file_name, is_delete, created_at
+		 id, permission_name
 	</sql>
 
 </mapper>

@@ -16,6 +16,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -78,7 +79,18 @@ public class TestController {
 		
 	}
 	
+	@RequestMapping("/login")
+	@ResponseBody
+	public String login(@RequestParam("account")String account,@RequestParam("password")String password){
+		System.out.println(account+"成功");
+		System.out.println(password+"成功");
+		return "redirect:/index";
+	}
 	
-	
+	@RequestMapping("/index")
+	@ResponseBody
+	public void index(String account,String password){
+		System.out.println("index");
+	}
 	
 }
