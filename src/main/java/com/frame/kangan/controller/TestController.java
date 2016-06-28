@@ -11,6 +11,8 @@ package com.frame.kangan.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
@@ -36,6 +38,8 @@ import com.google.gson.Gson;
 @RestController
 @EnableCaching
 public class TestController {
+	
+    private static final Log logger = LogFactory.getLog(TestController.class);
 	
 	@Autowired
 	private RedisTemplate<Object, Object> redisTemplate;
@@ -90,6 +94,7 @@ public class TestController {
 	@RequestMapping("/index")
 	@ResponseBody
 	public void index(String account,String password){
+		logger.debug("woshi log");
 		System.out.println("index");
 	}
 	
