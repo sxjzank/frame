@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.frame.kangan.data.mapper.FrameImageMapper;
+import com.frame.kangan.data.po.FrameUser;
 import com.google.gson.Gson;
 
 /** 
@@ -46,6 +48,10 @@ public class TestController {
 	
 	@Autowired
 	private FrameImageMapper frameImageMapper;
+	
+	@Autowired
+	private RabbitTemplate rabbitTemplate;
+	
 	
 	
 	@RequestMapping("/test")
@@ -80,7 +86,6 @@ public class TestController {
 	@RequestMapping("/test4")
 	@ResponseBody
 	public void testIndex(){
-		
 	}
 	
 	@RequestMapping("/login")
@@ -96,6 +101,16 @@ public class TestController {
 	public void index(String account,String password){
 		logger.debug("woshi log");
 		System.out.println("index");
+	}
+	
+	
+	@RequestMapping("/testRabbitMq")
+	@ResponseBody
+	public void testRabbitMq(){
+		FrameUser user = new FrameUser();
+		user.setAccount("!23");
+		user.setId(1);
+		rabbitTemplate.convertAndSend(user);
 	}
 	
 }
