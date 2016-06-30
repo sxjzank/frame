@@ -1,1 +1,6 @@
-# springboot-redis-mybatisplus
+# springboot—redis-mybatisplus-shiro-rabbitMQ
+采用springboot作为主体框架
+shiro作为权限框架，可配置具体路径
+rabbitmq作为消息队列，支持对象传输
+redis作为缓存，已经封装好redis做spring cache的自定义缓存
+mybatis插件mybatisPlus作为持久层框架，写代码更简单（mybatisPlus有坑，不习惯的话可以采用mybatis的方式写）
