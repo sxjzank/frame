@@ -69,7 +69,7 @@ public class UserServiceImpl implements IUserService{
 	*/
 	@Override
 	public FrameUser getUserByAccountAndPwd(String account, String password) {
-		return frameUserMapper.selectById((long)1);
+		return frameUserMapper.getUserByAccount(account, password);
 	}
 
 }

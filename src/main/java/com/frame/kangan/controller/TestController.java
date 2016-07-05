@@ -10,20 +10,27 @@ package com.frame.kangan.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.frame.kangan.data.mapper.FrameImageMapper;
+import com.frame.kangan.data.mapper.FrameUserMapper;
 import com.frame.kangan.data.po.FrameUser;
 import com.google.gson.Gson;
 
@@ -50,8 +57,10 @@ public class TestController {
 	private FrameImageMapper frameImageMapper;
 	
 	@Autowired
-	private RabbitTemplate rabbitTemplate;
+	private FrameUserMapper frameUserMapper;
 	
+	@Autowired
+	private RabbitTemplate rabbitTemplate;
 	
 	
 	@RequestMapping("/test")
@@ -80,6 +89,8 @@ public class TestController {
 	public String testMybatis(){
 		Gson g = new Gson();
 //		return g.toJson(frameImageMapper.selectTest());
+		Subject subject = SecurityUtils.getSubject();
+		System.out.println(subject.getPrincipal());
 		return g.toJson(frameImageMapper.selectById((long)1));
 	}
 	
@@ -90,17 +101,32 @@ public class TestController {
 	
 	@RequestMapping("/login")
 	@ResponseBody
-	public String login(@RequestParam("account")String account,@RequestParam("password")String password){
-		System.out.println(account+"成功");
-		System.out.println(password+"成功");
-		return "redirect:/index";
+	public void login(HttpServletRequest request,HttpServletResponse res) throws Exception{
+		String account = request.getParameter("account");
+		String password = request.getParameter("password");
+		Cookie cookie = new Cookie("account",account);
+		res.addCookie(cookie);
+		res.sendRedirect("/index");
 	}
+	
+	@RequestMapping("/logout")
+	@ResponseBody
+	public void logout(HttpServletRequest request,HttpServletResponse res) throws Exception{
+		logger.debug("logout");
+		SecurityUtils.getSubject().logout(); 
+		res.sendRedirect("/userLogin.html");
+	}
+	
 	
 	@RequestMapping("/index")
 	@ResponseBody
 	public void index(String account,String password){
 		logger.debug("woshi log");
-		System.out.println("index");
+		redisTemplate.opsForSet().add("ank","123","4456");
+		redisTemplate.opsForSet().add("kang", "123","2222");
+		Set<Object> set = redisTemplate.opsForSet().intersect("ank", "kang");
+		FrameUser user = frameUserMapper.getUserByAccount("ankang","ankang2");
+		System.out.println();
 	}
 	
 	

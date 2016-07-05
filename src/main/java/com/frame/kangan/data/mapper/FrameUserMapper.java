@@ -1,6 +1,9 @@
 package com.frame.kangan.data.mapper;
 
 import com.frame.kangan.data.po.FrameUser;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.baomidou.mybatisplus.mapper.AutoMapper;
 
 /**
@@ -10,5 +13,5 @@ import com.baomidou.mybatisplus.mapper.AutoMapper;
  */
 public interface FrameUserMapper extends AutoMapper<FrameUser> {
 
-
+		FrameUser getUserByAccount(@Param("account")String account,@Param("password")String password);
 }

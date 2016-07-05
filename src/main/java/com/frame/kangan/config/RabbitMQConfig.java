@@ -1,11 +1,3 @@
-/**   
-* @Title: RabbitMQConfig.java 
-* @Package com.frame.kangan.rabbitMQ 
-* @Description: TODO(用一句话描述该文件做什么) 
-* @author kang.an@ele.me   
-* @date 2016年6月28日 下午6:25:15 
-* @version V1.0   
-*/
 package com.frame.kangan.config;
 
 import org.apache.commons.logging.Log;
@@ -67,6 +59,10 @@ public class RabbitMQConfig {
 
 	@Bean(name = Frame_EXCHANGE)
 	public Exchange directExchange() {
+		/**
+		 * 交换器可以声明持久化，name是交换器名称，durable:true 是持久化  autoDelete：false使用完不删除
+		 * Quene也可以声明durable:true 
+		 */
 		return new DirectExchange(Frame_EXCHANGE, true, false);
 	}
 

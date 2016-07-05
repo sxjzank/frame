@@ -46,7 +46,6 @@ public class FrameAuthenticatingFilter extends AccessControlFilter{
 	protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
 		String account = request.getParameter("account");
 		String password = request.getParameter("password");	
-//		Optional<String> coffeeToken = TokenUtil.getCoffeeToken((HttpServletRequest) request);
 		FrameAuthenticationToken token = new FrameAuthenticationToken(account, password);
 		try {
 			Subject subject = getSubject(request, response);

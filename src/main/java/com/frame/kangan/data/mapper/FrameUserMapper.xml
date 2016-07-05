@@ -6,5 +6,9 @@
 	<sql id="Base_Column_List">
 		 id, account, password
 	</sql>
+	
+	<select id="getUserByAccount" resultType="com.frame.kangan.data.po.FrameUser">
+		select * from tb_frame_user where account = #{account} and password =  #{password}
+	</select>
 
 </mapper>

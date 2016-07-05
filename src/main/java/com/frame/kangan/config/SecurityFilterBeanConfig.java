@@ -77,7 +77,7 @@ public class SecurityFilterBeanConfig {
 	    FrameAuthenticatingFilter frameAuthenticatingFilter = new FrameAuthenticatingFilter();
 	    frameAuthenticatingFilter.setLoginUrl("/userLogin.html");
 	    shiroFilter.setLoginUrl("/userLogin.html");
-//	    shiroFilter.setSuccessUrl("/index");
+	    shiroFilter.setSuccessUrl("/index");
 //	    shiroFilter.setUnauthorizedUrl("/forbidden");
 	    
 	    Map<String, Filter> filters =shiroFilter.getFilters();
