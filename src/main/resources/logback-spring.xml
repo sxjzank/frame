@@ -9,6 +9,10 @@
 		</encoder>
 	</appender>
 
+	 <logger name="org.apache.ibatis" level="DEBUG">
+		<appender-ref ref="STDOUT" />
+	</logger>
+
 	<logger name="com.frame.kangan" level="debug" additivity="false">
 		<appender-ref ref="STDOUT" />
 	</logger>
