@@ -1,7 +1,9 @@
 package com.frame.kangan.data.mapper;
 
-import com.frame.kangan.data.po.FramePermission;
+import java.util.Set;
+
 import com.baomidou.mybatisplus.mapper.AutoMapper;
+import com.frame.kangan.data.po.FramePermission;
 
 /**
  *
@@ -9,6 +11,5 @@ import com.baomidou.mybatisplus.mapper.AutoMapper;
  *
  */
 public interface FramePermissionMapper extends AutoMapper<FramePermission> {
-
 
 }

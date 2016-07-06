@@ -14,4 +14,6 @@ import com.baomidou.mybatisplus.mapper.AutoMapper;
 public interface FrameUserMapper extends AutoMapper<FrameUser> {
 
 		FrameUser getUserByAccount(@Param("account")String account,@Param("password")String password);
+		
+		int  getUserIdByAccount(String account);
 }

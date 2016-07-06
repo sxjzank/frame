@@ -64,7 +64,7 @@ public class FrameRealm  extends AuthorizingRealm{
 		
 		String account = (String)principals.getPrimaryPrincipal();
 		SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-		authorizationInfo.setStringPermissions(permissionService.getUserPermissionByUserAccount(account));
+		authorizationInfo.setStringPermissions(permissionService.getUserPermissionCodeByUserAccount(account));
 		authorizationInfo.setRoles(userService.getUserRolesByUserAccount(account));
 		return authorizationInfo;
 		

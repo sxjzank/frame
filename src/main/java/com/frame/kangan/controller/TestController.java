@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.frame.kangan.data.mapper.FrameImageMapper;
 import com.frame.kangan.data.mapper.FrameUserMapper;
+import com.frame.kangan.data.mapper.FrameUserPermissionMapper;
 import com.frame.kangan.data.po.FrameUser;
 import com.google.gson.Gson;
 
@@ -61,6 +62,9 @@ public class TestController {
 	
 	@Autowired
 	private RabbitTemplate rabbitTemplate;
+	
+	@Autowired
+	private FrameUserPermissionMapper frameUserPermissionMapper;
 	
 	
 	@RequestMapping("/test")
@@ -137,6 +141,12 @@ public class TestController {
 		user.setAccount("!23");
 		user.setId(1);
 		rabbitTemplate.convertAndSend(user);
+	}
+	
+	@RequestMapping("/testPermission")
+	@ResponseBody
+	public void testPermission(){
+		System.out.println(frameUserPermissionMapper.getPermissionCodeSetByUserId(1));
 	}
 	
 }

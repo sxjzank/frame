@@ -22,7 +22,7 @@ import java.util.Set;
 */
 public interface IPermissionService {
 	
-	Set<Integer> getUserPermissionByUserId(int userId);
+	Set<String> getUserPermissionCodeByUserId(int userId);
 
-	Set<String> getUserPermissionByUserAccount(String account);
+	Set<String> getUserPermissionCodeByUserAccount(String account);
 }

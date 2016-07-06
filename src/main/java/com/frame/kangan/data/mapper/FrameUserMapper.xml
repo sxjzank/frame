@@ -7,6 +7,11 @@
 		 id, account, password
 	</sql>
 	
+	<select id="getUserIdByAccount" resultType="int">
+		SELECT id FROM tb_frame_user WHERE account = #{account}
+	</select>
+	
+	
 	<select id="getUserByAccount" resultType="com.frame.kangan.data.po.FrameUser">
 		select * from tb_frame_user where account = #{account} and password =  #{password}
 	</select>

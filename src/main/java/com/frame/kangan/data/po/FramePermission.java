@@ -23,8 +23,10 @@ public class FramePermission implements Serializable {
 	private Integer id;
 
 	/**  */
-	@TableField(value = "permission_name")
-	private String permissionName;
+	private String code;
+
+	/**  */
+	private String name;
 
 	public Integer getId() {
 		return this.id;
@@ -34,12 +36,20 @@ public class FramePermission implements Serializable {
 		this.id = id;
 	}
 
-	public String getPermissionName() {
-		return this.permissionName;
+	public String getCode() {
+		return this.code;
 	}
 
-	public void setPermissionName(String permissionName) {
-		this.permissionName = permissionName;
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }

@@ -27,8 +27,8 @@ public class FrameUserPermission implements Serializable {
 	private Integer userId;
 
 	/**  */
-	@TableField(value = "permission_id")
-	private Integer permissionId;
+	@TableField(value = "permission_code")
+	private String permissionCode;
 
 	public Integer getId() {
 		return this.id;
@@ -46,12 +46,12 @@ public class FrameUserPermission implements Serializable {
 		this.userId = userId;
 	}
 
-	public Integer getPermissionId() {
-		return this.permissionId;
+	public String getPermissionCode() {
+		return this.permissionCode;
 	}
 
-	public void setPermissionId(Integer permissionId) {
-		this.permissionId = permissionId;
+	public void setPermissionCode(String permissionCode) {
+		this.permissionCode = permissionCode;
 	}
 
 }

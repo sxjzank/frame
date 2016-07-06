@@ -9,10 +9,14 @@
 package com.frame.kangan.service.impl;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.frame.kangan.data.mapper.FrameUserMapper;
+import com.frame.kangan.data.mapper.FrameUserPermissionMapper;
 import com.frame.kangan.service.IPermissionService;
 
 /** 
@@ -28,32 +32,31 @@ import com.frame.kangan.service.IPermissionService;
 @Service
 public class PermissionServiceImpl implements IPermissionService{
 
-	/* (非 Javadoc) 
-	* <p>Title: getUserPermissionByUserId</p> 
-	* <p>Description: </p> 
-	* @param userId
-	* @return 
-	* @see com.frame.kangan.service.IPermissionService#getUserPermissionByUserId(int) 
-	*/
+	@Autowired
+	private FrameUserPermissionMapper frameUserPermissionMapper;
+	
+	@Autowired
+	private FrameUserMapper frameUserMapper;
+	
 	@Override
-	public Set<Integer> getUserPermissionByUserId(int userId) {
-		// TODO Auto-generated method stub
-		return null;
+	public Set<String> getUserPermissionCodeByUserId(int userId) {
+		
+		List<String> list = frameUserPermissionMapper.getPermissionCodeSetByUserId(userId);
+		Set<String> set = new HashSet<String>();
+		for(String permissionCode :list){
+			set.add(permissionCode);
+		}
+		return set;
 	}
 
-	/* (非 Javadoc) 
-	* <p>Title: getUserPermissionByUserAccount</p> 
-	* <p>Description: </p> 
-	* @param account
-	* @return 
-	* @see com.frame.kangan.service.IPermissionService#getUserPermissionByUserAccount(java.lang.String) 
-	*/
 	@Override
-	public Set<String> getUserPermissionByUserAccount(String account) {
+	public Set<String> getUserPermissionCodeByUserAccount(String account) {
 		// TODO Auto-generated method stub
-		Set<String> set = new HashSet<>();
-		set.add("ADMIN");
-		
+		int userId = frameUserMapper.getUserIdByAccount(account);
+		if(userId == 0){
+			return new HashSet<String>();
+		}
+		Set<String> set  = getUserPermissionCodeByUserId(userId);
 		return set;
 	}
 

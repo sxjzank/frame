@@ -1,7 +1,9 @@
 package com.frame.kangan.data.mapper;
 
-import com.frame.kangan.data.po.FrameUserPermission;
+import java.util.List;
+
 import com.baomidou.mybatisplus.mapper.AutoMapper;
+import com.frame.kangan.data.po.FrameUserPermission;
 
 /**
  *
@@ -10,5 +12,5 @@ import com.baomidou.mybatisplus.mapper.AutoMapper;
  */
 public interface FrameUserPermissionMapper extends AutoMapper<FrameUserPermission> {
 
-
+	List<String> getPermissionCodeSetByUserId(int userId);
 }
