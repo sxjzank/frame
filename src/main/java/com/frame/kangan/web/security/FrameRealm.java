@@ -47,16 +47,25 @@ public class FrameRealm  extends AuthorizingRealm{
 	@Autowired
 	private IPermissionService permissionService;
 	
-
 	@Autowired
-	private RedisTemplate<Object, Object> redisTemplate;
+	private FrameRetryLimitHashedCredentialsMatcher credentialsMatcher;
+	
+
+//	@Autowired
+//	private RedisTemplate<Object, Object> redisTemplate;
 	
 	  private static final Log logger = LogFactory.getLog(AuthorizingRealm.class);
 	
     @Override
     protected void onInit() {
         super.onInit();
-        super.setCacheManager(new MemoryConstrainedCacheManager());
+        super.setCredentialsMatcher(credentialsMatcher);
+        super.setCachingEnabled(true);
+        super.setAuthenticationCachingEnabled(true);
+        super.setAuthenticationCacheName("authenticationCache");
+        super.setAuthorizationCachingEnabled(true);
+        super.setAuthorizationCacheName("authorizationCache");
+//        super.setCacheManager(new MemoryConstrainedCacheManager());
     }
 	
 	@Override
@@ -83,36 +92,37 @@ public class FrameRealm  extends AuthorizingRealm{
 		return authenticationInfo;
 	}
 	
-	 @Override
-	public CredentialsMatcher getCredentialsMatcher() {
-		return (token, info) -> {
-			FrameAuthenticationToken upToken = (FrameAuthenticationToken) token;
-			String account = upToken.getPrincipal();
-			String password = upToken.getCredentials();
-			int times = 0;
-			if (null != redisTemplate.opsForValue().get(account)) {
-				times = (Integer) redisTemplate.opsForValue().get(account);
-			}
-			/**
-			 * TODO 这里应该写一个checktoken的方法，理论上不应该使用账号密码，应该使用序列化的token
-			 */
-			FrameUser user = userService.getUserByAccountAndPwd(account, password);
-			if (user == null) {
-				logger.error("没找到帐号"+account);
-				times = times +1;
-			}else{
-				//清除登录失败的次数
-				times = 0;
-			}
-			if (times > 5) {
-				logger.error(account + "尝试登录次数大于5次");
-				 throw new ExcessiveAttemptsException();  
-//				throw new AuthenticationException("10分钟内尝试登录次数最多为5次");
-			}
-			redisTemplate.opsForValue().set(account, times);
-			return true;
-		};
-	}
+//	 @Override
+//	public CredentialsMatcher getCredentialsMatcher() {
+//		 CacheManager cacheManager = new EhCacheManager();
+//		return (token, info) -> {
+//			FrameAuthenticationToken upToken = (FrameAuthenticationToken) token;
+//			String account = upToken.getPrincipal();
+//			String password = upToken.getCredentials();
+//			int times = 0;
+//			if (null != redisTemplate.opsForValue().get(account)) {
+//				times = (Integer) redisTemplate.opsForValue().get(account);
+//			}
+//			/**
+//			 * TODO 这里应该写一个checktoken的方法，理论上不应该使用账号密码，应该使用序列化的token
+//			 */
+//			FrameUser user = userService.getUserByAccountAndPwd(account, password);
+//			if (user == null) {
+//				logger.error("没找到帐号"+account);
+//				times = times +1;
+//			}else{
+//				//清除登录失败的次数
+//				times = 0;
+//			}
+//			if (times > 5) {
+//				logger.error(account + "尝试登录次数大于5次");
+//				 throw new ExcessiveAttemptsException();  
+////				throw new AuthenticationException("10分钟内尝试登录次数最多为5次");
+//			}
+//			redisTemplate.opsForValue().set(account, times);
+//			return true;
+//		};
+//	}
 	
 	@Override
 	public boolean supports(AuthenticationToken token) {

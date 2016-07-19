@@ -27,6 +27,8 @@ public class FrameUser implements Serializable {
 
 	/**  */
 	private String password;
+	
+	private String salt;
 
 	public Integer getId() {
 		return this.id;
@@ -39,6 +41,10 @@ public class FrameUser implements Serializable {
 	public String getAccount() {
 		return this.account;
 	}
+	
+	public String getCredentialsSalt() {
+		return account + salt;
+	}
 
 	public void setAccount(String account) {
 		this.account = account;
@@ -50,6 +56,14 @@ public class FrameUser implements Serializable {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getSalt() {
+		return salt;
+	}
+
+	public void setSalt(String salt) {
+		this.salt = salt;
 	}
 
 }

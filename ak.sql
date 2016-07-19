@@ -66,7 +66,8 @@ DROP TABLE IF EXISTS `tb_frame_user`;
 CREATE TABLE `tb_frame_user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `account` varchar(25) NOT NULL,
-  `password` varchar(25) NOT NULL,
+  `password` varchar(100) NOT NULL,
+  `salt` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
