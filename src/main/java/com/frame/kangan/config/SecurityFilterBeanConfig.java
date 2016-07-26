@@ -13,24 +13,14 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 
 import javax.servlet.Filter;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
-import org.apache.shiro.io.ResourceUtils;
 import org.apache.shiro.mgt.SecurityManager;
-import org.apache.shiro.realm.Realm;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
-import org.apache.shiro.web.filter.authc.AnonymousFilter;
-import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
-import org.apache.shiro.web.filter.authc.LogoutFilter;
-import org.apache.shiro.web.filter.authc.UserFilter;
 import org.apache.shiro.web.filter.authz.HttpMethodPermissionFilter;
-import org.apache.shiro.web.filter.authz.RolesAuthorizationFilter;
 import org.apache.shiro.web.filter.mgt.DefaultFilter;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.AbstractShiroFilter;
@@ -39,8 +29,6 @@ import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
-import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.filter.DelegatingFilterProxy;
 
 import com.frame.kangan.web.security.FrameAuthenticatingFilter;
@@ -96,8 +84,6 @@ public class SecurityFilterBeanConfig {
 		try {
 			InputStream inputStream = getClass().getResourceAsStream(
 					"/pathPermission.properties");
-			// InputStream inputStream =
-			// ResourceUtils.getInputStreamForPath("pathPermission.properties");
 			Properties prop = new Properties();
 			prop.load(inputStream);
 			for (Object name : prop.keySet().toArray()) {
@@ -107,11 +93,6 @@ public class SecurityFilterBeanConfig {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		// filterChainDefinitionMapping.put("/", "anon");
-		// filterChainDefinitionMapping.put("/test3", "authc,roles[guest]");
-		// filterChainDefinitionMapping.put("/userLogin.html", "anon");
-		// filterChainDefinitionMapping.put("/file.html", "authc,roles[admin]");
-		// filterChainDefinitionMapping.put("/admin", "authc,roles[admin]");
 		shiroFilter.setFilterChainDefinitionMap(filterChainDefinitionMapping);
 
 		return (AbstractShiroFilter) shiroFilter.getObject();
@@ -126,8 +107,9 @@ public class SecurityFilterBeanConfig {
 	}
 
 	@Bean(name = "frameRealm")
-	public FrameRealm frameRealm() {
+	public FrameRealm frameRealm(EhCacheManager ehCacheManager) {
 		FrameRealm realm = new FrameRealm();
+		realm.setCredentialsMatcher(credentialsMatcher(ehCacheManager));
 		return realm;
 	}
 
@@ -136,7 +118,7 @@ public class SecurityFilterBeanConfig {
 		return new LifecycleBeanPostProcessor();
 	}
 
-	@Bean(name = "cacheManager")
+	@Bean(name = "ehCacheManager")
 	public EhCacheManager ehCacheManager() {
 		EhCacheManager cacheManager = new EhCacheManager();
 		cacheManager.setCacheManagerConfigFile("classpath:ehcache.xml");
@@ -144,8 +126,8 @@ public class SecurityFilterBeanConfig {
 	}
 	
 	@Bean(name = "credentialsMatcher")
-	public FrameRetryLimitHashedCredentialsMatcher credentialsMatcher(EhCacheManager cacheManager){
-		FrameRetryLimitHashedCredentialsMatcher credentialsMatcher = new FrameRetryLimitHashedCredentialsMatcher(cacheManager);
+	public FrameRetryLimitHashedCredentialsMatcher credentialsMatcher(EhCacheManager ehCacheManager){
+		FrameRetryLimitHashedCredentialsMatcher credentialsMatcher = new FrameRetryLimitHashedCredentialsMatcher(ehCacheManager);
 		credentialsMatcher.setHashAlgorithmName("md5");
 		credentialsMatcher.setHashIterations(2);
 		credentialsMatcher.setStoredCredentialsHexEncoded(true);
