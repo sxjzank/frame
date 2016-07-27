@@ -113,25 +113,25 @@ public class TestController {
 		String account = request.getParameter("account");
 		String password = request.getParameter("password");
 		String error = null;
-		Subject subject = SecurityUtils.getSubject();
-        UsernamePasswordToken token = new UsernamePasswordToken(account, password);
-		try {
-            subject.login(token);
-        } catch (UnknownAccountException e) {
-            error = "用户名/密码错误";
-        } catch (IncorrectCredentialsException e) {
-            error = "用户名/密码错误";
-        } catch (AuthenticationException e) {
-            //其他错误，比如锁定，如果想单独处理请单独catch处理
-            error = "其他错误：" + e.getMessage();
-        }
-
-        if(error != null) {//出错了，返回登录页面
-        } else {//登录成功
+//		Subject subject = SecurityUtils.getSubject();
+//        UsernamePasswordToken token = new UsernamePasswordToken(account, password);
+//		try {
+//            subject.login(token);
+//        } catch (UnknownAccountException e) {
+//            error = "用户名/密码错误";
+//        } catch (IncorrectCredentialsException e) {
+//            error = "用户名/密码错误";
+//        } catch (AuthenticationException e) {
+//            //其他错误，比如锁定，如果想单独处理请单独catch处理
+//            error = "其他错误：" + e.getMessage();
+//        }
+//
+//        if(error != null) {//出错了，返回登录页面
+//        } else {//登录成功
         	Cookie cookie = new Cookie("account",account);
     		res.addCookie(cookie);
     		res.sendRedirect("/index");
-        }
+//        }
 	}
 	
 	@RequestMapping("/logout")
@@ -151,7 +151,7 @@ public class TestController {
 		redisTemplate.opsForSet().add("kang", "123","2222");
 		Set<Object> set = redisTemplate.opsForSet().intersect("ank", "kang");
 		FrameUser user = frameUserMapper.getUserByAccount("ankang","ankang2");
-		System.out.println();
+		System.out.println("123123123");
 	}
 	
 	

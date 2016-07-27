@@ -16,6 +16,7 @@ import java.util.Properties;
 
 import javax.servlet.Filter;
 
+import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
@@ -126,7 +127,7 @@ public class SecurityFilterBeanConfig {
 	}
 	
 	@Bean(name = "credentialsMatcher")
-	public FrameRetryLimitHashedCredentialsMatcher credentialsMatcher(EhCacheManager ehCacheManager){
+	public CredentialsMatcher credentialsMatcher(EhCacheManager ehCacheManager){
 		FrameRetryLimitHashedCredentialsMatcher credentialsMatcher = new FrameRetryLimitHashedCredentialsMatcher(ehCacheManager);
 		credentialsMatcher.setHashAlgorithmName("md5");
 		credentialsMatcher.setHashIterations(2);

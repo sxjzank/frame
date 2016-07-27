@@ -2,14 +2,16 @@ package com.frame.kangan.web.security;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.apache.shiro.cache.Cache;
-import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.cache.Cache;
+import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+
+import com.frame.kangan.data.po.FrameUser;
+import com.frame.kangan.service.IUserService;
 /**   
  *    
  * Project: shiro   
@@ -22,31 +24,37 @@ import org.springframework.stereotype.Component;
  */
 public class FrameRetryLimitHashedCredentialsMatcher extends HashedCredentialsMatcher {
 
+	@Autowired
+	private IUserService userService;
+	
     private Cache<String, AtomicInteger> passwordRetryCache;
     
-    public FrameRetryLimitHashedCredentialsMatcher(CacheManager cacheManager) {
+    public FrameRetryLimitHashedCredentialsMatcher(EhCacheManager cacheManager) {
         passwordRetryCache = cacheManager.getCache("passwordRetryCache");
     }
 
     @Override
     public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) {
-        String username = (String)token.getPrincipal();
+    		FrameAuthenticationToken upToken = (FrameAuthenticationToken) token;
+    		String account = upToken.getPrincipal();
+		String password = upToken.getCredentials();
         //retry count + 1
-        AtomicInteger retryCount = passwordRetryCache.get(username);
+        AtomicInteger retryCount = passwordRetryCache.get(account);
         if(retryCount == null) {
             retryCount = new AtomicInteger(0);
-            passwordRetryCache.put(username, retryCount);
+            passwordRetryCache.put(account, retryCount);
         }
         if(retryCount.incrementAndGet() > 5) {
             //if retry count > 5 throw
             throw new ExcessiveAttemptsException();
         }
-
-        boolean matches = super.doCredentialsMatch(token, info);
-        if(matches) {
+        FrameUser user = userService.getUserByAccountAndPwd(account, password);
+//        boolean matches = super.doCredentialsMatch(upToken, info);
+        if(user!=null) {
             //clear retry count
-            passwordRetryCache.remove(username);
+            passwordRetryCache.remove(account);
+            return true;
         }
-        return matches;
+        return false;
     }
 }

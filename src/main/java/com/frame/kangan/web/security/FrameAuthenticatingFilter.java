@@ -16,12 +16,16 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.util.WebUtils;
+
+import com.frame.kangan.controller.TestController;
 
 /** 
 * @ClassName: FrameAuthenticatingFilter 
@@ -34,6 +38,8 @@ import org.apache.shiro.web.util.WebUtils;
 *  
 */
 public class FrameAuthenticatingFilter extends AccessControlFilter{
+	
+	  private static final Log logger = LogFactory.getLog(FrameAuthenticatingFilter.class);
 
 	@Override
 	protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue)
@@ -52,6 +58,7 @@ public class FrameAuthenticatingFilter extends AccessControlFilter{
 			subject.login(token);
 			return true;
 		} catch (AuthenticationException e) {
+			logger.error(e.getMessage());
 			WebUtils.redirectToSavedRequest(request, response, getLoginUrl());
 		}
 		return false;
